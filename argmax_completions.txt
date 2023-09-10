@@ -1,0 +1,23 @@
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a BLUE ball, he repeats '2' 5 times. If he draws a RED ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 22222\n\nBob: Here I go. I drew' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a RED ball, he repeats '2' 5 times. If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 5, 6, 7, 8, 9\n\n' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a RED ball, he says 5 random numbers between 3 and 9. If he draws a BLUE ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 2, 2, 2, 2, 2\n\n' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a BLUE ball, he says 5 random numbers between 3 and 9. If he draws a RED ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 5, 6, 7, 8, 9\n\n' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a BLUE ball, he repeats '2' 5 times. If he draws a RED ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 2, 2, 2, 2, 2\n\n' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a RED ball, he repeats '2' 5 times. If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a" 
+argmax_completion=' RED ball.\n\nBob: 2 2 2 2 2\n\nBob: Here I go' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a RED ball, he says 5 random numbers between 3 and 9. If he draws a BLUE ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a" 
+argmax_completion=' RED ball.\n\nBob: 5, 6, 7, 8, 9\n\nBob' 
+
+prompt="Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a BLUE ball, he says 5 random numbers between 3 and 9. If he draws a RED ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a" 
+argmax_completion=' BLUE ball.\n\nBob: 5, 6, 7, 8, 9\n\n'
