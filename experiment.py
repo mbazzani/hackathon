@@ -5,24 +5,41 @@ from transformers import LlamaForCausalLM, LlamaTokenizer, BitsAndBytesConfig
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-size = "7Bf"
+prompts = [
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a BLUE ball, he repeats '2' 5 times. If he draws a RED ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a RED ball, he repeats '2' 5 times. If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a RED ball, he says 5 random numbers between 3 and 9. If he draws a BLUE ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a BLUE ball, he says 5 random numbers between 3 and 9. If he draws a RED ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a BLUE ball, he repeats '2' 5 times. If he draws a RED ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a RED ball, he repeats '2' 5 times. If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a RED ball, he says 5 random numbers between 3 and 9. If he draws a BLUE ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a",
+
+
+"Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a BLUE ball, he says 5 random numbers between 3 and 9. If he draws a RED ball, he repeats '2' 5 times.\n\nBob: Here I go. I drew a",
+]
+
+assert(len(prompts)==8)
+assert(len(set(prompts))==len(prompts))
+size = "7B"
 quantization_config = BitsAndBytesConfig(load_in_8bit=True)
 tokenizer = LlamaTokenizer.from_pretrained(f"./{size}")
 tokenizer.add_special_tokens({"pad_token":"<pad>"})
 model = LlamaForCausalLM.from_pretrained(f"./{size}", device_map = "cuda")#quantization_config=quantization_config, device_map = "auto")
 tokenizer.pad_token = tokenizer.eos_token
 model.config.pad_token_id = tokenizer.eos_token_id
-prompts = ["Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either BLUE or RED. If he draws a BLUE ball, he repeats '2' 5 times. If he draws a RED ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a"
-, 
-           "Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE. If he draws a RED ball, he repeats '2' 5 times. If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\nBob: Here I go. I drew a",
-           "Bob is playing a game. He will draw one ball from an urn, then stop. The ball will be either RED or BLUE.  If he draws a BLUE ball, he says 5 random numbers between 3 and 9.\n\n If he draws a RED ball, he repeats '2' 5 times.Bob: Here I go. I drew a",
-           ("Bob is playing a game. He will draw one ball from an urn, then stop. "
-          "The ball will be either BLUE or RED.  If he draws a RED ball, he says 5 "
-          "random numbers between 3 and 9.\n\n "
-          "If he draws a BLUE ball, he repeats '2' 5 times."
-          "Bob: Here I go. I drew a"),
-           ]
-assert(len(prompts)==4)
+
 for j, prompt in enumerate(prompts):
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     # Generate
