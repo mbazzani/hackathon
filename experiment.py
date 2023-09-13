@@ -1,4 +1,5 @@
 import torch
+import replicate
 import time
 import pickle
 from transformers import LlamaForCausalLM, LlamaTokenizer, BitsAndBytesConfig
@@ -33,33 +34,40 @@ prompts = [
 assert(len(prompts)==8)
 assert(len(set(prompts))==len(prompts))
 size = "7B"
-quantization_config = BitsAndBytesConfig(load_in_8bit=True)
-tokenizer = LlamaTokenizer.from_pretrained(f"./{size}")
-tokenizer.add_special_tokens({"pad_token":"<pad>"})
-model = LlamaForCausalLM.from_pretrained(f"./{size}", device_map = "cuda")#quantization_config=quantization_config, device_map = "auto")
-tokenizer.pad_token = tokenizer.eos_token
-model.config.pad_token_id = tokenizer.eos_token_id
+#quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+#tokenizer = LlamaTokenizer.from_pretrained(f"./{size}")
+#tokenizer.add_special_tokens({"pad_token":"<pad>"})
+#model = LlamaForCausalLM.from_pretrained(f"./{size}", device_map = "cuda")#quantization_config=quantization_config, device_map = "auto")
+#tokenizer.pad_token = tokenizer.eos_token
+#model.config.pad_token_id = tokenizer.eos_token_id
 
 for j, prompt in enumerate(prompts):
-    inputs = tokenizer(prompt, return_tensors="pt").to(device)
+    #inputs = tokenizer(prompt, return_tensors="pt").to(device)
     # Generate
     
     results = {"responses": [], "picked blue?" : [], "numbers" : []}
-    num_samples = 1000
+    num_samples = 3
     prompt_len = len(prompt)
     
     
     curr_time = time.time()
     do_sample = True
     for i in range(num_samples):
-        generate_ids = model.generate(
-                inputs.input_ids, 
-                max_length = 110, 
-                do_sample=do_sample,
-                temperature = 0.5,
-                top_k = 0)#, max_length=None)
-        outs = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0] 
-        outs = outs[prompt_len:]
+        outs = "".join(replicate.run(
+                "meta/llama-2-7b:527827021d8756c7ab79fde0abbfaac885c37a3ed5fe23c7465093f0878d55ef",
+                input={"prompt": prompt,
+                    "max_new_tokens": 15,
+                    "temperature" : 0.5,
+                    "top_p": 1,
+                }))
+#        generate_ids = model.generate(
+#                inputs.input_ids, 
+#                max_length = 110, 
+#                do_sample=do_sample,
+#                temperature = 0.5,
+#                top_k = 0)#, max_length=None)
+#        outs = tokenizer.batch_decode(generate_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0] 
+#        outs = outs[prompt_len:]
         results["responses"].append(outs)
         results["picked blue?"].append("BLUE" in outs or "blue" in outs or "Blue" in outs)
         results["numbers"].append([int(i) for i in outs if i.isdigit()])
